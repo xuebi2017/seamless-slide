@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .window {
+            width: 500px;
+            height: 500px;
+            margin: 50px auto;
+            overflow: hidden;
+        }
+        .images {
+            position: relative;
+        }
+        .images > img {
+            position: absolute;
+            transition: all 0.3s;
+            top: 0;
+        }
+        /* .images > img:nth-child(1) {
+            left: 0;
+        }
+        .images > img:nth-child(2) {
+            left: 100%;
+        }
+        .images > img:nth-child(3) {
+            left: 100%;
+        }
+        .images > img.right {
+            left: 100%;
+        } */
+        .images > img.current {
+            transform: translateX(0);
+            z-index: 1;
+        }
+        .images > img.leave {
+            transform: translateX(-100%);
+            z-index: 1;
+        }
+        .images > img.enter {
+            transform: translateX(100%);
+            /* z-index: 1; */
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="images">
+            <img src="./images/1.jpg" alt="图片" height="500" width="500">
+            <img src="./images/2.jpg" alt="图片" height="500" width="500">
+            <img src="./images/3.jpg" alt="图片" height="500" width="500">
+        </div>
+    </div>
+    <script src="./jquery 3.3.1.js"></script>
+    <script>
+        // setTimeout(() => {
+        //     $('.images > img:nth-child(1)').css('transform','translateX(-100%)')
+        //     $('.images > img:nth-child(2)').css('transform','translateX(-100%)')
+        //     $('.images > img:nth-child(1)').one('transitionend', function(e) {
+        //         $(e.currentTarget).addClass('right').css({transform: 'none'})
+        //     })
+        // }, 2000);
+        // setTimeout(() => {
+        //     $('.images > img:nth-child(2)').css('transform','translateX(-200%)')
+        //     $('.images > img:nth-child(3)').css('transform','translateX(-100%)')
+        //     $('.images > img:nth-child(2)').one('transitionend', function(e) {
+        //         $(e.currentTarget).addClass('right').css({transform: 'none'})
+        //     })
+        // }, 4000);
+        // setTimeout(() => {
+        //     $('.images > img:nth-child(3)').css('transform','translateX(-200%)')
+        //     $('.images > img:nth-child(1)').css('transform','translateX(-100%)')
+        //     $('.images > img:nth-child(3)').one('transitionend', function(e) {
+        //         $(e.currentTarget).addClass('right').css({transform: 'none'})
+        //     })
+        // }, 6000);
+
+        // setTimeout(() => {
+        //     $('.images > img:nth-child(1)').removeClass('current').addClass('leave').one('transitionend', (e) => {
+        //         $(e.currentTarget).removeClass('leave').addClass('enter')
+        //     })                                  
+        //     $('.images > img:nth-child(2)').removeClass('enter').addClass('current')
+        // }, 2000)
+        // setTimeout(() => {
+        //     $('.images > img:nth-child(2)').removeClass('current').addClass('leave').one('transitionend', (e) => {
+        //         $(e.currentTarget).removeClass('leave').addClass('enter')
+        //     })                                  
+        //     $('.images > img:nth-child(3)').removeClass('enter').addClass('current')
+        // }, 4000)
+        // setTimeout(() => {
+        //     $('.images > img:nth-child(3)').removeClass('current').addClass('leave').one('transitionend', (e) => {
+        //         $(e.currentTarget).removeClass('leave').addClass('enter')
+        //     })                                  
+        //     $('.images > img:nth-child(1)').removeClass('enter').addClass('current')
+        // }, 6000)
+        let n
+        init()
+        setInterval(() => {
+            makeLeave(getImage(n)).one('transitionend', (e) => {
+                // $(e.currentTarget).removeClass('leave').addClass('enter')
+                makeEnter($(e.currentTarget))
+            })                                  
+            // $(`.images > img:nth-child(${x(n+1)}`).removeClass('enter').addClass('current')
+            makeCurrent(getImage(n+1))
+            n++
+        }, 2000)
+
+
+        function x(n) {
+            n = n%3
+            if(n === 0) {
+                n = 3
+            }
+            return n
+        }
+        function getImage(n) {
+            return $(`.images > img:nth-child(${x(n)})`)
+        }
+        function init() {
+            n = 1
+            $(`.images > img:nth-child(${n})`).addClass('current').siblings().addClass('enter')
+        }
+        function makeCurrent($node) {
+            // $node.removeClass('leave enter').addClass('current')
+            // return $node
+            return $node.removeClass('leave enter').addClass('current')
+        }
+        function makeLeave($node) {
+            $node.removeClass('current enter').addClass('leave')
+            return $node
+        }
+        function makeEnter($node) {
+            $node.removeClass('leave current').addClass('enter')
+            return $node
+        }
+    </script>
+</body>
+</html>
